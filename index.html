@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Drag and Drop App</title>
+    <title>Campaign Builder</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -81,7 +81,7 @@
 <body>
     <div class="container">
         <div id="buttons-container">
-            <div class="button-item">
+            <!--div class="button-item">
                 <input type="number" class="value-input" placeholder="Value">
                 <button class="draggable" data-value="0" draggable="true">Button 1</button>
             </div>
@@ -92,8 +92,7 @@
             <div class="button-item">
                 <input type="number" class="value-input" placeholder="Value">
                 <button class="draggable" data-value="0" draggable="true">Button 3</button>
-            </div>
-            <!-- Add more button items up to Button 15 -->
+            </div-->
         </div>
 
         <div id="boxes-container">
@@ -145,7 +144,7 @@
     </div>
 
     <script>
-        let tacticA = [{ "id": 1, "name": "Blog", "value": 4 },
+        const tacticA = [{ "id": 1, "name": "Blog", "value": 4 },
         { "id": 2, "name": "Case study", "value": 15 },
         { "id": 3, "name": "eBook", "value": 20 },
         { "id": 4, "name": "Email design", "value": 10 },
@@ -157,20 +156,50 @@
         { "id": 10, "name": "Video", "value": 35 },
         { "id": 11, "name": "White paper", "value": 20 }];
 
-        // Make sure buttons are draggable
-        document.querySelectorAll('.draggable').forEach(button => {
-            button.setAttribute('draggable', true);
-            button.addEventListener('dragstart', dragStart);
-        });
+        const tBox = document.getElementById("buttons-container");
 
-        document.querySelectorAll('.drop-zone').forEach(zone => {
-            zone.addEventListener('dragover', dragOver);
-            zone.addEventListener('drop', drop);
-        });
+        // make buttons based on data
+        function makeBtns() {
+            for (const i in tacticA) {
 
-        document.querySelectorAll('.value-input').forEach(input => {
-            input.addEventListener('input', updateButtonValue);
-        });
+                // make div to hold the value box next to the button
+                const newTactic = document.createElement('div');
+                newTactic.className = "button-item";
+
+                // create and attach input
+                const vi = document.createElement('input');
+                vi.type = "number";
+                vi.className = "value-input";
+                vi.value = tacticA[i].value;
+                newTactic.appendChild(vi);
+
+                // create and append btn
+                const btn = document.createElement('button');
+                btn.textContent = tacticA[i].name;
+                btn.id = tacticA[i].id;
+                btn.className = "draggable";
+                btn.dataset.value = tacticA[i].value;
+                btn.draggable = true;
+                newTactic.appendChild(btn);
+
+                // append to buttons-container
+                tBox.appendChild(newTactic);
+            }
+            // Make sure buttons are draggable
+            document.querySelectorAll('.draggable').forEach(button => {
+                // button.setAttribute('draggable', true);
+                button.addEventListener('dragstart', dragStart);
+            });
+            document.querySelectorAll('.drop-zone').forEach(zone => {
+                zone.addEventListener('dragover', dragOver);
+                zone.addEventListener('drop', drop);
+            });
+            document.querySelectorAll('.value-input').forEach(input => {
+                input.addEventListener('input', updateButtonValue);
+            });
+        }
+
+
 
         function dragStart(event) {
             const value = event.target.dataset.value;
@@ -184,7 +213,7 @@
         }
 
         function drop(event) {
-            event.preventDefault();
+            // event.preventDefault();
             const value = parseInt(event.dataTransfer.getData('value'), 10);
             const buttonName = event.dataTransfer.getData('name');
             const box = event.target.closest('.box');
@@ -225,6 +254,9 @@
                 button.dataset.value = inputValue;
             }
         }
+
+        // start gui
+        makeBtns();
 
     </script>
 </body>

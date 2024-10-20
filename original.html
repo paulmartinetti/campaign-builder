@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drag and Drop App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .container {
+            display: flex;
+            gap: 20px;
+        }
+
+        #buttons-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 600px;
+            /* Set a max height if needed */
+            overflow-y: auto;
+            /* Scroll if there are too many buttons */
+        }
+
+        .button-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .value-input {
+            width: 60px;
+        }
+
+        #boxes-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .box {
+            width: 100px;
+            height: 150px;
+            border: 2px dashed #aaa;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            position: relative;
+        }
+
+        .drop-zone {
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+            padding: 5px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .total {
+            margin-top: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div id="buttons-container">
+            <div class="button-item">
+                <input type="number" class="value-input" placeholder="Value">
+                <button class="draggable" data-value="0" draggable="true">Button 1</button>
+            </div>
+            <div class="button-item">
+                <input type="number" class="value-input" placeholder="Value">
+                <button class="draggable" data-value="0" draggable="true">Button 2</button>
+            </div>
+            <div class="button-item">
+                <input type="number" class="value-input" placeholder="Value">
+                <button class="draggable" data-value="0" draggable="true">Button 3</button>
+            </div>
+            <!-- Add more button items up to Button 15 -->
+        </div>
+
+        <div id="boxes-container">
+            <div class="row">
+                <div class="box" data-total="0">
+                    <label>Box 1</label>
+                    <div class="drop-zone"></div>
+                    <p class="total">Total: 0</p>
+                </div>
+                <div class="box" data-total="0">
+                    <label>Box 2</label>
+                    <div class="drop-zone"></div>
+                    <p class="total">Total: 0</p>
+                </div>
+                <div class="box" data-total="0">
+                    <label>Box 3</label>
+                    <div class="drop-zone"></div>
+                    <p class="total">Total: 0</p>
+                </div>
+                <div class="box" data-total="0">
+                    <label>Box 4</label>
+                    <div class="drop-zone"></div>
+                    <p class="total">Total: 0</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="box" data-total="0">
+                    <label>Box 5</label>
+                    <div class="drop-zone"></div>
+                    <p class="total">Total: 0</p>
+                </div>
+                <div class="box" data-total="0">
+                    <label>Box 6</label>
+                    <div class="drop-zone"></div>
+                    <p class="total">Total: 0</p>
+                </div>
+                <div class="box" data-total="0">
+                    <label>Box 7</label>
+                    <div class="drop-zone"></div>
+                    <p class="total">Total: 0</p>
+                </div>
+                <div class="box" data-total="0">
+                    <label>Box 8</label>
+                    <div class="drop-zone"></div>
+                    <p class="total">Total: 0</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        // Make sure buttons are draggable
+        document.querySelectorAll('.draggable').forEach(button => {
+            button.setAttribute('draggable', true);
+            button.addEventListener('dragstart', dragStart);
+        });
+
+        document.querySelectorAll('.drop-zone').forEach(zone => {
+            zone.addEventListener('dragover', dragOver);
+            zone.addEventListener('drop', drop);
+        });
+
+        document.querySelectorAll('.value-input').forEach(input => {
+            input.addEventListener('input', updateButtonValue);
+        });
+
+        function dragStart(event) {
+            const value = event.target.dataset.value;
+            const buttonName = event.target.textContent;
+            event.dataTransfer.setData('value', value);
+            event.dataTransfer.setData('name', buttonName);
+        }
+
+        function dragOver(event) {
+            event.preventDefault(); // This is necessary to allow the drop
+        }
+
+        function drop(event) {
+            event.preventDefault();
+            const value = parseInt(event.dataTransfer.getData('value'), 10);
+            const buttonName = event.dataTransfer.getData('name');
+            const box = event.target.closest('.box');
+            const dropZone = box.querySelector('.drop-zone');
+
+            if (!isNaN(value)) {
+                // Clone the button and set up its removal behavior
+                const clonedButton = document.createElement('button');
+                clonedButton.textContent = buttonName;
+                clonedButton.classList.add('cloned-button');
+                clonedButton.dataset.value = value;
+                clonedButton.addEventListener('click', () => {
+                    // Remove the button and update the total
+                    const buttonValue = parseInt(clonedButton.dataset.value, 10);
+                    const currentTotal = parseInt(box.dataset.total, 10);
+                    const newTotal = currentTotal - buttonValue;
+                    box.dataset.total = newTotal;
+                    box.querySelector('.total').textContent = `Total: ${newTotal}`;
+                    dropZone.removeChild(clonedButton);
+                });
+
+                // Append the cloned button to the drop zone
+                dropZone.appendChild(clonedButton);
+
+                // Update the total in the box
+                const currentTotal = parseInt(box.dataset.total, 10);
+                const newTotal = currentTotal + value;
+                box.dataset.total = newTotal;
+                box.querySelector('.total').textContent = `Total: ${newTotal}`;
+            }
+        }
+
+        function updateButtonValue(event) {
+            const inputValue = event.target.value;
+            // Find the button next to the input
+            const button = event.target.nextElementSibling;
+            if (button) {
+                button.dataset.value = inputValue;
+            }
+        }
+
+    </script>
+</body>
+
+</html>

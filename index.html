@@ -99,7 +99,7 @@
             <div class="row">
                 <div class="box" data-total="0">
                     <label>Box 1</label>
-                    <div class="drop-zone"></div>
+                    <div class="drop-zone" id="1"></div>
                     <p class="total">Total: 0</p>
                 </div>
                 <div class="box" data-total="0">
@@ -218,6 +218,8 @@
             const buttonName = event.dataTransfer.getData('name');
             const box = event.target.closest('.box');
             const dropZone = box.querySelector('.drop-zone');
+            // added an id to dropZone 1 only-- 
+            console.log(dropZone.id);
 
             if (!isNaN(value)) {
                 // Clone the button and set up its removal behavior

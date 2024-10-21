@@ -100,35 +100,38 @@
                 <div class="box">
                     <label id="box1">Box 1</label>
                     <div class="drop-zone" id="d1"></div>
-                    <p class="total">Total: 0</p>
+                    <p class="total" id="t1">Total: 0</p>
                 </div>
                 <div class="box">
                     <label id="box2">Box 2</label>
                     <div class="drop-zone" id="d2"></div>
-                    <p class="total">Total: 0</p>
+                    <p class="total" id="t2">Total: 0</p>
                 </div>
                 <div class="box">
                     <label id="box3">Box 3</label>
                     <div class="drop-zone" id="d3"></div>
-                    <p class="total">Total: 0</p>
+                    <p class="total" id="t3">Total: 0</p>
                 </div>
             </div>
             <div class="row">
                 <div class="box">
                     <label id="box4">Box 4</label>
                     <div class="drop-zone" id="d4"></div>
-                    <p class="total">Total: 0</p>
+                    <p class="total" id="t4">Total: 0</p>
                 </div>
                 <div class="box">
                     <label id="box5">Box 5</label>
                     <div class="drop-zone" id="d5"></div>
-                    <p class="total">Total: 0</p>
+                    <p class="total" id="t5">Total: 0</p>
                 </div>
                 <div class="box">
                     <label id="box6">Box 6</label>
                     <div class="drop-zone" id="d6"></div>
-                    <p class="total">Total: 0</p>
+                    <p class="total" id="t6">Total: 0</p>
                 </div>
+            </div>
+            <div class="row">
+                <label class="total" id="boxT">Grand Total = 0</label>
             </div>
         </div>
     </div>
@@ -136,6 +139,7 @@
     <script>
         // global vars
         var curBtnId;
+        var campA = [];
 
         const tacticA = [{ "id": 1, "name": "Blog", "value": 4 },
         { "id": 2, "name": "Case study", "value": 15 },
@@ -177,6 +181,7 @@
                 vi.type = "number";
                 vi.className = "value-input";
                 vi.value = tacticA[i].value;
+                vi.id = "v" + tacticA[i].id;
                 newTactic.appendChild(vi);
 
                 // create and append btn
@@ -184,7 +189,7 @@
                 btn.textContent = tacticA[i].name;
                 btn.id = tacticA[i].id;
                 btn.className = "draggable";
-                btn.dataset.value = tacticA[i].value;
+                //btn.dataset.value = tacticA[i].value;
                 btn.draggable = true;
                 btn.addEventListener('dragstart', dragStart);
                 newTactic.appendChild(btn);
@@ -192,10 +197,12 @@
                 // append to buttons-container
                 tBox.appendChild(newTactic);
             }
+            // add listeners to all drop zones
             document.querySelectorAll('.drop-zone').forEach(zone => {
                 zone.addEventListener('dragover', dragOver);
                 zone.addEventListener('drop', drop);
             });
+            // add listeners to all input
             document.querySelectorAll('.value-input').forEach(input => {
                 input.addEventListener('input', updateButtonValue);
             });
@@ -205,7 +212,6 @@
 
         function dragStart(event) {
             curBtnId = event.target.id;
-            //console.log(curBtnId);
         }
 
         function dragOver(event) {
@@ -215,18 +221,25 @@
         function drop(event) {
             //event.preventDefault();
             // to make a new button
-            const buttonName = getBtnName(curBtnId);
+            const btnName = getBtnName(curBtnId);
             const box = event.target.closest('.box');
             const dropZone = box.querySelector('.drop-zone');
 
+            // store data
+            let obj = {};
+            obj.btnId = curBtnId;
+            obj.dropZ = dropZone.id;
+            campA.push(obj);
+            //console.log(campA[0].dropZ);
+
             // Clone the button and set up its removal behavior
             const clonedButton = document.createElement('button');
-            clonedButton.textContent = buttonName;
+            clonedButton.textContent = btnName;
             clonedButton.classList.add('cloned-button');
             clonedButton.addEventListener('click', () => {
-                // Remove the button and update the total
-                //box.querySelector('.total').textContent = `Total: ${newTotal}`;
+                // Remove the button
                 dropZone.removeChild(clonedButton);
+                // update total
             });
 
             // Append the cloned button to the drop zone
@@ -239,11 +252,7 @@
 
         function updateButtonValue(event) {
             const inputValue = event.target.value;
-            // Find the button next to the input
-            const button = event.target.nextElementSibling;
-            if (button) {
-                button.dataset.value = inputValue;
-            }
+            console.log(event.target.id);
         }
 
         // helpers

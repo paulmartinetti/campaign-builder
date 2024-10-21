@@ -51,8 +51,8 @@
         }
 
         .box {
-            width: 100px;
-            height: 150px;
+            width: 150px;
+            height: 200px;
             border: 2px dashed #aaa;
             display: flex;
             flex-direction: column;
@@ -98,44 +98,34 @@
         <div id="boxes-container">
             <div class="row">
                 <div class="box" data-total="0">
-                    <label>Box 1</label>
+                    <label id="box1">Box 1</label>
                     <div class="drop-zone" id="1"></div>
                     <p class="total">Total: 0</p>
                 </div>
                 <div class="box" data-total="0">
-                    <label>Box 2</label>
+                    <label id="box2">Box 2</label>
                     <div class="drop-zone"></div>
                     <p class="total">Total: 0</p>
                 </div>
                 <div class="box" data-total="0">
-                    <label>Box 3</label>
-                    <div class="drop-zone"></div>
-                    <p class="total">Total: 0</p>
-                </div>
-                <div class="box" data-total="0">
-                    <label>Box 4</label>
+                    <label id="box3">Box 3</label>
                     <div class="drop-zone"></div>
                     <p class="total">Total: 0</p>
                 </div>
             </div>
             <div class="row">
                 <div class="box" data-total="0">
-                    <label>Box 5</label>
+                    <label id="box4">Box 4</label>
                     <div class="drop-zone"></div>
                     <p class="total">Total: 0</p>
                 </div>
                 <div class="box" data-total="0">
-                    <label>Box 6</label>
+                    <label id="box5">Box 5</label>
                     <div class="drop-zone"></div>
                     <p class="total">Total: 0</p>
                 </div>
                 <div class="box" data-total="0">
-                    <label>Box 7</label>
-                    <div class="drop-zone"></div>
-                    <p class="total">Total: 0</p>
-                </div>
-                <div class="box" data-total="0">
-                    <label>Box 8</label>
+                    <label id="box6">Box 6</label>
                     <div class="drop-zone"></div>
                     <p class="total">Total: 0</p>
                 </div>
@@ -157,6 +147,20 @@
         { "id": 11, "name": "White paper", "value": 20 }];
 
         const tBox = document.getElementById("buttons-container");
+
+
+        function dateBoxes() {
+            const currentDate = new Date();
+            let mI = currentDate.getMonth();
+            const monthA = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"];
+
+            for (let i = 1; i<7; i++){
+                let b = document.getElementById("box"+i);
+                b.innerHTML = monthA[mI];
+                mI++;
+                mI = (mI > 11) ? 0 : mI;
+            }
+        }
 
         // make buttons based on data
         function makeBtns() {
@@ -259,6 +263,7 @@
 
         // start gui
         makeBtns();
+        dateBoxes();
 
     </script>
 </body>

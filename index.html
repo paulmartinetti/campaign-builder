@@ -99,34 +99,34 @@
             <div class="row">
                 <div class="box">
                     <label id="box1">Box 1</label>
-                    <div class="drop-zone" id="1"></div>
+                    <div class="drop-zone" id="d1"></div>
                     <p class="total">Total: 0</p>
                 </div>
                 <div class="box">
                     <label id="box2">Box 2</label>
-                    <div class="drop-zone" id="2"></div>
+                    <div class="drop-zone" id="d2"></div>
                     <p class="total">Total: 0</p>
                 </div>
                 <div class="box">
                     <label id="box3">Box 3</label>
-                    <div class="drop-zone" id="3"></div>
+                    <div class="drop-zone" id="d3"></div>
                     <p class="total">Total: 0</p>
                 </div>
             </div>
             <div class="row">
                 <div class="box">
                     <label id="box4">Box 4</label>
-                    <div class="drop-zone" id="4"></div>
+                    <div class="drop-zone" id="d4"></div>
                     <p class="total">Total: 0</p>
                 </div>
                 <div class="box">
                     <label id="box5">Box 5</label>
-                    <div class="drop-zone" id="5"></div>
+                    <div class="drop-zone" id="d5"></div>
                     <p class="total">Total: 0</p>
                 </div>
                 <div class="box">
                     <label id="box6">Box 6</label>
-                    <div class="drop-zone" id="6"></div>
+                    <div class="drop-zone" id="d6"></div>
                     <p class="total">Total: 0</p>
                 </div>
             </div>
@@ -205,7 +205,7 @@
 
         function dragStart(event) {
             curBtnId = event.target.id;
-            console.log(curBtnId);
+            //console.log(curBtnId);
         }
 
         function dragOver(event) {
@@ -213,41 +213,28 @@
         }
 
         function drop(event) {
-            event.preventDefault();
+            //event.preventDefault();
             // to make a new button
-            const value = parseInt(event.dataTransfer.getData('value'), 10);
-            const buttonName = event.dataTransfer.getData('name');
-
+            const buttonName = getBtnName(curBtnId);
             const box = event.target.closest('.box');
             const dropZone = box.querySelector('.drop-zone');
-            // added an id to dropZone 1 only-- 
-            console.log(dropZone.id);
 
-            if (!isNaN(value)) {
-                // Clone the button and set up its removal behavior
-                const clonedButton = document.createElement('button');
-                clonedButton.textContent = buttonName;
-                clonedButton.classList.add('cloned-button');
-                clonedButton.dataset.value = value;
-                clonedButton.addEventListener('click', () => {
-                    // Remove the button and update the total
-                    const buttonValue = parseInt(clonedButton.dataset.value, 10);
-                    const currentTotal = parseInt(box.dataset.total, 10);
-                    const newTotal = currentTotal - buttonValue;
-                    box.dataset.total = newTotal;
-                    box.querySelector('.total').textContent = `Total: ${newTotal}`;
-                    dropZone.removeChild(clonedButton);
-                });
+            // Clone the button and set up its removal behavior
+            const clonedButton = document.createElement('button');
+            clonedButton.textContent = buttonName;
+            clonedButton.classList.add('cloned-button');
+            clonedButton.addEventListener('click', () => {
+                // Remove the button and update the total
+                //box.querySelector('.total').textContent = `Total: ${newTotal}`;
+                dropZone.removeChild(clonedButton);
+            });
 
-                // Append the cloned button to the drop zone
-                dropZone.appendChild(clonedButton);
+            // Append the cloned button to the drop zone
+            dropZone.appendChild(clonedButton);
 
-                // Update the total in the box
-                const currentTotal = parseInt(box.dataset.total, 10);
-                const newTotal = currentTotal + value;
-                box.dataset.total = newTotal;
-                box.querySelector('.total').textContent = `Total: ${newTotal}`;
-            }
+            // Update the total in the box
+            //box.querySelector('.total').textContent = `Total: ${newTotal}`;
+
         }
 
         function updateButtonValue(event) {
@@ -256,6 +243,18 @@
             const button = event.target.nextElementSibling;
             if (button) {
                 button.dataset.value = inputValue;
+            }
+        }
+
+        // helpers
+        function getBtnName(temp) {
+            for (const i in tacticA) {
+                if (tacticA[i].id == temp) return tacticA[i].name;
+            }
+        }
+        function getBtnValue(temp) {
+            for (const i in tacticA) {
+                if (tacticA[i].id == temp) return tacticA[i].value;
             }
         }
 

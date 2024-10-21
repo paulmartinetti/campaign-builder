@@ -97,36 +97,36 @@
 
         <div id="boxes-container">
             <div class="row">
-                <div class="box" data-total="0">
+                <div class="box">
                     <label id="box1">Box 1</label>
                     <div class="drop-zone" id="1"></div>
                     <p class="total">Total: 0</p>
                 </div>
-                <div class="box" data-total="0">
+                <div class="box">
                     <label id="box2">Box 2</label>
-                    <div class="drop-zone"></div>
+                    <div class="drop-zone" id="2"></div>
                     <p class="total">Total: 0</p>
                 </div>
-                <div class="box" data-total="0">
+                <div class="box">
                     <label id="box3">Box 3</label>
-                    <div class="drop-zone"></div>
+                    <div class="drop-zone" id="3"></div>
                     <p class="total">Total: 0</p>
                 </div>
             </div>
             <div class="row">
-                <div class="box" data-total="0">
+                <div class="box">
                     <label id="box4">Box 4</label>
-                    <div class="drop-zone"></div>
+                    <div class="drop-zone" id="4"></div>
                     <p class="total">Total: 0</p>
                 </div>
-                <div class="box" data-total="0">
+                <div class="box">
                     <label id="box5">Box 5</label>
-                    <div class="drop-zone"></div>
+                    <div class="drop-zone" id="5"></div>
                     <p class="total">Total: 0</p>
                 </div>
-                <div class="box" data-total="0">
+                <div class="box">
                     <label id="box6">Box 6</label>
-                    <div class="drop-zone"></div>
+                    <div class="drop-zone" id="6"></div>
                     <p class="total">Total: 0</p>
                 </div>
             </div>
@@ -134,6 +134,9 @@
     </div>
 
     <script>
+        // global vars
+        var curBtnId;
+
         const tacticA = [{ "id": 1, "name": "Blog", "value": 4 },
         { "id": 2, "name": "Case study", "value": 15 },
         { "id": 3, "name": "eBook", "value": 20 },
@@ -148,15 +151,14 @@
 
         const tBox = document.getElementById("buttons-container");
 
-
         function dateBoxes() {
             const currentDate = new Date();
             let mI = currentDate.getMonth();
             const monthA = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"];
 
-            for (let i = 1; i<7; i++){
-                let b = document.getElementById("box"+i);
-                b.innerHTML = monthA[mI];
+            for (let i = 1; i < 7; i++) {
+                let b = document.getElementById("box" + i);
+                b.textContent = monthA[mI];
                 mI++;
                 mI = (mI > 11) ? 0 : mI;
             }
@@ -184,16 +186,12 @@
                 btn.className = "draggable";
                 btn.dataset.value = tacticA[i].value;
                 btn.draggable = true;
+                btn.addEventListener('dragstart', dragStart);
                 newTactic.appendChild(btn);
 
                 // append to buttons-container
                 tBox.appendChild(newTactic);
             }
-            // Make sure buttons are draggable
-            document.querySelectorAll('.draggable').forEach(button => {
-                // button.setAttribute('draggable', true);
-                button.addEventListener('dragstart', dragStart);
-            });
             document.querySelectorAll('.drop-zone').forEach(zone => {
                 zone.addEventListener('dragover', dragOver);
                 zone.addEventListener('drop', drop);
@@ -206,10 +204,8 @@
 
 
         function dragStart(event) {
-            const value = event.target.dataset.value;
-            const buttonName = event.target.textContent;
-            event.dataTransfer.setData('value', value);
-            event.dataTransfer.setData('name', buttonName);
+            curBtnId = event.target.id;
+            console.log(curBtnId);
         }
 
         function dragOver(event) {
@@ -217,9 +213,11 @@
         }
 
         function drop(event) {
-            // event.preventDefault();
+            event.preventDefault();
+            // to make a new button
             const value = parseInt(event.dataTransfer.getData('value'), 10);
             const buttonName = event.dataTransfer.getData('name');
+
             const box = event.target.closest('.box');
             const dropZone = box.querySelector('.drop-zone');
             // added an id to dropZone 1 only-- 

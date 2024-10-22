@@ -7,7 +7,8 @@
     <title>Campaign Builder</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Merriweather', Arial, Sans-Serif;
+            color: #003555;
             padding: 20px;
             display: flex;
             justify-content: center;
@@ -35,8 +36,30 @@
             gap: 10px;
         }
 
+        button {
+            background-color: #003555;
+            /* blue background */
+            border: 1px solid;
+            color: white;
+            /* White text */
+            padding: 4px;
+            /* Padding for text */
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 12px;
+            /* Text size */
+            font-family: Arial, Sans-Serif;
+            border-radius: 5px;
+            /* Rounded corners */
+            cursor: pointer;
+        }
+
+
         .value-input {
             width: 60px;
+            border: 1px solid;
+            border-color: #003555;
         }
 
         #boxes-container {
@@ -53,7 +76,7 @@
         .box {
             width: 150px;
             height: 200px;
-            border: 2px dashed #aaa;
+            border: 2px dashed #39b449;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -100,8 +123,6 @@
                     <div class="drop-zone" id="d3"></div>
                     <p class="total" id="t3">Total: 0</p>
                 </div>
-            </div>
-            <div class="row">
                 <div class="box">
                     <label id="box4">Box 4</label>
                     <div class="drop-zone" id="d4"></div>
@@ -116,6 +137,38 @@
                     <label id="box6">Box 6</label>
                     <div class="drop-zone" id="d6"></div>
                     <p class="total" id="t6">Total: 0</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="box">
+                    <label id="box7">Box 7</label>
+                    <div class="drop-zone" id="d7"></div>
+                    <p class="total" id="t7">Total: 0</p>
+                </div>
+                <div class="box">
+                    <label id="box8">Box 8</label>
+                    <div class="drop-zone" id="d8"></div>
+                    <p class="total" id="t8">Total: 0</p>
+                </div>
+                <div class="box">
+                    <label id="box9">Box 9</label>
+                    <div class="drop-zone" id="d9"></div>
+                    <p class="total" id="t9">Total: 0</p>
+                </div>
+                <div class="box">
+                    <label id="box10">Box 10</label>
+                    <div class="drop-zone" id="d10"></div>
+                    <p class="total" id="t10">Total: 0</p>
+                </div>
+                <div class="box">
+                    <label id="box11">Box 11</label>
+                    <div class="drop-zone" id="d11"></div>
+                    <p class="total" id="t11">Total: 0</p>
+                </div>
+                <div class="box">
+                    <label id="box12">Box 12</label>
+                    <div class="drop-zone" id="d12"></div>
+                    <p class="total" id="t12">Total: 0</p>
                 </div>
             </div>
             <div class="row">
@@ -150,7 +203,7 @@
             let mI = currentDate.getMonth();
             const monthA = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"];
 
-            for (let i = 1; i < 7; i++) {
+            for (let i = 1; i < 13; i++) {
                 let b = document.getElementById("box" + i);
                 b.textContent = monthA[mI];
                 mI++;
@@ -269,7 +322,7 @@
             // grand total
             let gt = 0;
             // drop box totals
-            let dropA = [0, 0, 0, 0, 0, 0, 0];
+            let dropA = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
             // loop once through dropped button data
             for (const i in campA) {
                 // get the btn id
@@ -292,7 +345,7 @@
                 }
             }
             // update ui
-            for (let i=1;i<7;i++) {
+            for (let i = 1; i < 13; i++) {
                 const nv = dropA[i];
                 // update ui
                 document.getElementById("t" + i).textContent = `Total: ${nv}`;

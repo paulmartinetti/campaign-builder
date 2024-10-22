@@ -81,18 +81,6 @@
 <body>
     <div class="container">
         <div id="buttons-container">
-            <!--div class="button-item">
-                <input type="number" class="value-input" placeholder="Value">
-                <button class="draggable" data-value="0" draggable="true">Button 1</button>
-            </div>
-            <div class="button-item">
-                <input type="number" class="value-input" placeholder="Value">
-                <button class="draggable" data-value="0" draggable="true">Button 2</button>
-            </div>
-            <div class="button-item">
-                <input type="number" class="value-input" placeholder="Value">
-                <button class="draggable" data-value="0" draggable="true">Button 3</button>
-            </div-->
         </div>
 
         <div id="boxes-container">
@@ -208,8 +196,6 @@
             });
         }
 
-
-
         function dragStart(event) {
             curBtnId = event.target.id;
         }
@@ -219,7 +205,6 @@
         }
 
         function drop(event) {
-            //event.preventDefault();
             // to make a new button
             const btnName = getBtnName(curBtnId);
             const box = event.target.closest('.box');
@@ -230,7 +215,6 @@
             obj.btnId = curBtnId;
             obj.dzId = dropZone.id;
             campA.push(obj);
-            //console.log(campA[0].dzId);
 
             // Clone the button and set up its removal behavior
             const clonedButton = document.createElement('button');
@@ -250,9 +234,20 @@
 
         }
 
+        // tactic value increase / decrease
         function updateButtonValue(event) {
-            const inputValue = event.target.value;
-            console.log(event.target.id);
+            const inputValue = parseInt(event.target.value, 10);
+            //console.log(inputValue);
+            const vId = event.target.id;
+            // extract the number
+            const id = parseInt(vId.match(/\d+/)[0], 10);
+            // update the value in the database
+            for (const i in tacticA) {
+                if (id == tacticA[i].id) {
+                    tacticA[i].value = inputValue;
+                }
+            }
+            calcTotals();
         }
 
         // calculate totals
@@ -277,9 +272,11 @@
                         const dI = parseInt(dzId.match(/\d+/)[0], 10);
                         // update dropbox value from before
                         dropA[dI] += val;
+                        // add to grand total
                         gt += val;
-                        // get updated value and update ui
+                        // get updated value
                         const nv = dropA[dI];
+                        // update ui
                         document.getElementById("t"+dI).textContent = `Total: ${nv}`;
                     }
                 }

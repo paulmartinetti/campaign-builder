@@ -131,7 +131,7 @@
                 </div>
             </div>
             <div class="row">
-                <label class="total" id="boxT">Grand Total = 0</label>
+                <label class="total" id="gt">Grand Total: 0</label>
             </div>
         </div>
     </div>
@@ -228,9 +228,9 @@
             // store data
             let obj = {};
             obj.btnId = curBtnId;
-            obj.dropZ = dropZone.id;
+            obj.dzId = dropZone.id;
             campA.push(obj);
-            //console.log(campA[0].dropZ);
+            //console.log(campA[0].dzId);
 
             // Clone the button and set up its removal behavior
             const clonedButton = document.createElement('button');
@@ -246,7 +246,7 @@
             dropZone.appendChild(clonedButton);
 
             // Update the total in the box
-            //box.querySelector('.total').textContent = `Total: ${newTotal}`;
+            calcTotals();
 
         }
 
@@ -255,15 +255,47 @@
             console.log(event.target.id);
         }
 
+        // calculate totals
+        function calcTotals(){
+            // grand total
+            let gt = 0;
+            // drop box totals
+            let dropA = [0,0,0,0,0,0,0];
+            // loop once through dropped button data
+            for (const i in campA){
+                // get the btn id
+                const btnId = campA[i].btnId;
+                // find the btn to get its value
+                for (const j in tacticA){
+                    // when the dropped tactic is found
+                    if (btnId == tacticA[j].id){
+                        // get its value
+                        const val = tacticA[j].value;
+                        // use its dzId (d1-d6) to update boxA with value
+                        const dzId = campA[i].dzId;
+                        // extract the number
+                        const dI = parseInt(dzId.match(/\d+/)[0], 10);
+                        // update dropbox value from before
+                        dropA[dI] += val;
+                        gt += val;
+                        // get updated value and update ui
+                        const nv = dropA[dI];
+                        document.getElementById("t"+dI).textContent = `Total: ${nv}`;
+                    }
+                }
+            }
+            document.getElementById("gt").textContent = `Grand Total: ${gt}`;
+        }
+
         // helpers
-        function getBtnName(temp) {
+        function getBtnName(id) {
             for (const i in tacticA) {
-                if (tacticA[i].id == temp) return tacticA[i].name;
+                if (tacticA[i].id == id) return tacticA[i].name;
             }
         }
-        function getBtnValue(temp) {
+        function getBtnValue(id) {
             for (const i in tacticA) {
-                if (tacticA[i].id == temp) return tacticA[i].value;
+                if (tacticA[i].id == id) return tacticA[i].value;
             }
         }
 

@@ -288,12 +288,14 @@
                         dropA[dI] += val;
                         // add to grand total
                         gt += val;
-                        // get updated value
-                        const nv = dropA[dI];
-                        // update ui
-                        document.getElementById("t" + dI).textContent = `Total: ${nv}`;
                     }
                 }
+            }
+            // update ui
+            for (let i=1;i<7;i++) {
+                const nv = dropA[i];
+                // update ui
+                document.getElementById("t" + i).textContent = `Total: ${nv}`;
             }
             document.getElementById("gt").textContent = `Grand Total: ${gt}`;
         }

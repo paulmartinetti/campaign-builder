@@ -128,6 +128,8 @@
         // global vars
         var curBtnId;
         var campA = [];
+        // as btns are placed, they need an id to update the data when they are removed
+        var pid = 100;
 
         const tacticA = [{ "id": 1, "name": "Blog", "value": 4 },
         { "id": 2, "name": "Case study", "value": 15 },
@@ -214,24 +216,36 @@
             let obj = {};
             obj.btnId = curBtnId;
             obj.dzId = dropZone.id;
+            obj.pid = pid;
             campA.push(obj);
 
-            // Clone the button and set up its removal behavior
-            const clonedButton = document.createElement('button');
-            clonedButton.textContent = btnName;
-            clonedButton.classList.add('cloned-button');
-            clonedButton.addEventListener('click', () => {
-                // Remove the button
-                dropZone.removeChild(clonedButton);
-                // update total
-            });
-
+            // Clone the btn (placed btn) and set up its removal behavior
+            const pBtn = document.createElement('button');
+            pBtn.textContent = btnName;
+            pBtn.id = pid;
+            pBtn.classList.add('cloned-button');
+            // listen for click and define actions on click
+            pBtn.addEventListener('click', removeBtn);
             // Append the cloned button to the drop zone
-            dropZone.appendChild(clonedButton);
-
+            dropZone.appendChild(pBtn);
             // Update the total in the box
             calcTotals();
-
+            // increment
+            pid++;
+        }
+        // remove btn
+        function removeBtn(event) {
+            console.log(event.target.id);
+            // update data
+            for (const i in campA) {
+                if (campA[i].pid == event.target.id) {
+                    campA.splice(i, 1);
+                }
+            }
+            // update totals
+            calcTotals();
+            // Remove the button
+            event.target.parentNode.removeChild(event.target);
         }
 
         // tactic value increase / decrease
@@ -251,19 +265,19 @@
         }
 
         // calculate totals
-        function calcTotals(){
+        function calcTotals() {
             // grand total
             let gt = 0;
             // drop box totals
-            let dropA = [0,0,0,0,0,0,0];
+            let dropA = [0, 0, 0, 0, 0, 0, 0];
             // loop once through dropped button data
-            for (const i in campA){
+            for (const i in campA) {
                 // get the btn id
                 const btnId = campA[i].btnId;
                 // find the btn to get its value
-                for (const j in tacticA){
+                for (const j in tacticA) {
                     // when the dropped tactic is found
-                    if (btnId == tacticA[j].id){
+                    if (btnId == tacticA[j].id) {
                         // get its value
                         const val = tacticA[j].value;
                         // use its dzId (d1-d6) to update boxA with value
@@ -277,7 +291,7 @@
                         // get updated value
                         const nv = dropA[dI];
                         // update ui
-                        document.getElementById("t"+dI).textContent = `Total: ${nv}`;
+                        document.getElementById("t" + dI).textContent = `Total: ${nv}`;
                     }
                 }
             }

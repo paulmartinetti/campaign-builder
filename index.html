@@ -199,7 +199,8 @@
         { "id": 8, "name": "Press release", "value": 8 },
         { "id": 9, "name": "Two-pager", "value": 8 },
         { "id": 10, "name": "Video", "value": 35 },
-        { "id": 11, "name": "White paper", "value": 20 }];
+        { "id": 11, "name": "White paper", "value": 20 },
+        { "id": 12, "name": "D-click to name", "value": 10 }];
 
         const tBox = document.getElementById("buttons-container");
 
@@ -349,7 +350,7 @@
                     }
                 }
             }
-            // update ui
+            // update ui using updated data
             for (let i = 1; i < 13; i++) {
                 const nv = dropA[i];
                 // update ui
@@ -369,10 +370,37 @@
                 if (tacticA[i].id == id) return tacticA[i].value;
             }
         }
+        function updateBtnName(oldName, newName) {
+            for (const i in tacticA) {
+                if (tacticA[i].name == oldName) tacticA[i].name = newName;
+            }
+        }
 
         // start gui
         makeBtns();
         dateBoxes();
+
+        // Function to make buttons editable
+        function makeButtonsEditable() {
+            // Select all buttons with the class 'draggable'
+            document.querySelectorAll('.draggable').forEach(button => {
+                // Add a double-click event listener
+                button.addEventListener('dblclick', () => {
+                    const oldName = button.textContent;
+                    // Prompt the user for a new name
+                    const newName = prompt("Enter a new name for the button:", button.textContent);
+                    // If the user entered a new name, update the button's text
+                    if (newName) {
+                        button.textContent = newName;
+                        updateBtnName(oldName, newName);
+                    }
+                });
+            });
+        }
+
+        // Call this function after the buttons are created
+        makeButtonsEditable();
+
 
     </script>
 </body>

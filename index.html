@@ -179,6 +179,7 @@
             <div class="row">
                 <label class="total" id="gt">Grand Total: 0</label>
             </div>
+            <button onclick="exportCsv()">Save CSV</button>
         </div>
     </div>
 
@@ -382,7 +383,7 @@
                     btnId = tacticA[i].id;
                 }
             }
-            // search dropped btns for id
+            // search dropped btns for id to rename them
             for (const i in campA) {
                 if (campA[i].btnId == btnId) {
                     // use pid to get dropped btn's structure id to rename it.
@@ -417,7 +418,67 @@
         // Call this function after the buttons are created
         makeButtonsEditable();
 
+        // export csv
+        function makeFile(csv) {
+            const blob = new Blob([csv], { type: 'text/csv' });
 
+            // Create a temporary URL for the Blob
+            const url = URL.createObjectURL(blob);
+
+            // Create a link element
+            const link = document.createElement('a');
+
+            // Set the link's href attribute to the temporary URL
+            link.href = url;
+
+            // Set the link's download attribute to the desired file name
+            link.download = "campaign-by-month";
+
+            // Append the link to the document body
+            document.body.appendChild(link);
+
+            // Programmatically click the link to trigger the download
+            link.click();
+
+            // Clean up by removing the link and revoking the temporary URL
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+        // export to csv
+        function exportCsv() {
+            // pretty column heads (as opposed to using key names)
+            let csv = ["Month", "Tactic", "Points"]
+            csv += '\n';
+            // load rows
+            for (const i in campA) {
+                let row = '';
+
+                // Iterate over each key in the object
+                for (const key in obj) {
+                    
+
+                    // get month
+
+                    
+                    if (key == "url") {
+                        
+                    }
+
+                    // get tactic name
+
+                    // get points
+
+
+                    // Add the value to the row
+                    row += `"${value}",`;
+                }
+
+                // Trim the trailing comma and add a newline character
+                csv += row.slice(0, -1) + '\n';
+            }
+            //console.log(csv);
+            makeFile(csv);
+        }
     </script>
 </body>
 

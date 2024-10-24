@@ -451,26 +451,29 @@
             let csv = ["Month", "Tactic", "Points"]
             csv += '\n';
             // check each of 12 drop zones
-            for (let i = 1; i < 13; i++) {
+            for (let m = 1; m < 13; m++) {
                 // search all dropped btn data
-                for (const j in campA) {
+                for (const d in campA) {
                     // if a month has a button
-                    if (campA[i].dzId == "t" + i) {
-                        // each btn gets a row
-                        let row = '';
-
+                    if (campA[d].dzId == "d" + m) {
+                        // row - get month name
+                        let row = document.getElementById("box" + m).textContent + ",";
+                        // get tactic name
+                        for (const b in tacticA) {
+                            // use dropped btn id to match tactic id, get name and value
+                            if (campA[d].btnId == tacticA[b].id) {
+                                // get tactic name
+                                row += tacticA[b].name + ",";
+                                // get points
+                                row += tacticA[b].value + '\n';
+                                // add to csv
+                                csv += row;
+                                // next dropped tactic
+                                break;
+                            }
+                        }
                     }
-                    // get tactic name
-
-                    // get points
-
-
-                    // Add the value to the row
-                    row += `"${value}",`;
                 }
-
-                // Trim the trailing comma and add a newline character
-                csv += row.slice(0, -1) + '\n';
             }
             //console.log(csv);
             makeFile(csv);

@@ -370,9 +370,25 @@
                 if (tacticA[i].id == id) return tacticA[i].value;
             }
         }
+        // 
         function updateBtnName(oldName, newName) {
+            // capture btn id to be able to update it everywhere
+            let btnId;
+            // update name in btn data
             for (const i in tacticA) {
-                if (tacticA[i].name == oldName) tacticA[i].name = newName;
+                if (tacticA[i].name == oldName) {
+                    tacticA[i].name = newName;
+                    // snag btn id
+                    btnId = tacticA[i].id;
+                }
+            }
+            // search dropped btns for id
+            for (const i in campA) {
+                if (campA[i].btnId == btnId) {
+                    // use pid to get dropped btn's structure id to rename it.
+                    let dzb = document.getElementById(campA[i].pid);
+                    dzb.textContent = newName;
+                }
             }
         }
 

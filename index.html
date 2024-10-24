@@ -178,8 +178,8 @@
             </div>
             <div class="row">
                 <label class="total" id="gt">Grand Total: 0</label>
+                <button onclick="exportCsv()">Save CSV</button>
             </div>
-            <button onclick="exportCsv()">Save CSV</button>
         </div>
     </div>
 
@@ -270,6 +270,7 @@
             // to make a new button
             const btnName = getBtnName(curBtnId);
             const box = event.target.closest('.box');
+            //console.log(box.querySelector('label').id); --> yields box3...
             const dropZone = box.querySelector('.drop-zone');
 
             // store data
@@ -449,21 +450,16 @@
             // pretty column heads (as opposed to using key names)
             let csv = ["Month", "Tactic", "Points"]
             csv += '\n';
-            // load rows
-            for (const i in campA) {
-                let row = '';
+            // check each of 12 drop zones
+            for (let i = 1; i < 13; i++) {
+                // search all dropped btn data
+                for (const j in campA) {
+                    // if a month has a button
+                    if (campA[i].dzId == "t" + i) {
+                        // each btn gets a row
+                        let row = '';
 
-                // Iterate over each key in the object
-                for (const key in obj) {
-                    
-
-                    // get month
-
-                    
-                    if (key == "url") {
-                        
                     }
-
                     // get tactic name
 
                     // get points
@@ -479,6 +475,8 @@
             //console.log(csv);
             makeFile(csv);
         }
+
+
     </script>
 </body>
 
